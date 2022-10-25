@@ -81,3 +81,4 @@ console.log(222);
 
 - promise 包含 n 个 promise 的数组；
 - 说明：返回一个新的 promise ，只有所有的 promise 都成功才成功，只要有一个失败了就直接失败；
+- 
