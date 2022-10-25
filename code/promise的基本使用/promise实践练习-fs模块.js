@@ -26,5 +26,5 @@ let p = new Promise((resolve, reject) => {
 p.then((res) => {
   console.log(res.toString());
 }, (err) => {
-  throw err
+  console.log(err);
 })
