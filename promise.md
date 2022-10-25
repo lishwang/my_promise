@@ -71,3 +71,13 @@ console.log(222);
 
 - response 成功的数据或 promise 对象；
 - 说明：返回一个成功/失败的promise对象；
+
+##### Promise.reject 方法 ` (err) => {} `;
+
+- err 失败的数据；
+- 说明：返回一个失败的 promise 对象；
+
+##### Promise.all 方法 ` (promise) => {} `;
+
+- promise 包含 n 个 promise 的数组；
+- 说明：返回一个新的 promise ，只有所有的 promise 都成功才成功，只要有一个失败了就直接失败；
