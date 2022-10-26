@@ -159,7 +159,24 @@ p.then(() => {
 // 控制台结果：2 err
 ```
 
-##### 如何中断 promise 链
+##### 如何中断 promise 链（只有一种方法）
 
 - 当使用 promise 的 then 链式调用时，在中间中断，不再调用后面的回调函数；
-- 办法：在回调函数中返回一个 pending 状态的 promise 对象；
+- 办法：**在回调函数中返回一个 pending 状态的 promise 对象**；
+
+```
+let p = new Promise((resolve, reject) => {
+  resolve('1');
+})
+p.then(() => {
+  console.log('2');
+  // 中断 promise 链
+  return new Promise(() => {});
+}).then(() => {
+  console.log('3');
+}).catch(err => {
+  console.log(err);
+})
+// 控制台结果：2
+```
+
