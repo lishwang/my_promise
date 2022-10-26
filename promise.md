@@ -137,3 +137,29 @@ p.then(res => {
 
 - promise 的 then() 返回一个新的 promise ，可以看成 then() 的链式调用；
 - 通过 then 的链式调用串联多个同步/异步任务；
+
+##### promise 异常穿透
+
+- 当使用 promise 的 then 链式调用时，**可以只在最后指定失败的回调（catch()）**；
+- 前面任何操作出了异常，都会传到最后失败的回调中处理，且在异常之后的then中的代码都不执行；
+
+```
+let p = new Promise((resolve, reject) => {
+  resolve('1')
+})
+p.then(() => {
+  console.log('2')
+}).then(() => {
+  throw 'err';
+}).then(() => {
+  console.log('3');
+}).catch(err => {
+  console.log(err);
+})
+// 控制台结果：2 err
+```
+
+##### 如何中断 promise 链
+
+- 当使用 promise 的 then 链式调用时，在中间中断，不再调用后面的回调函数；
+- 办法：在回调函数中返回一个 pending 状态的 promise 对象；
