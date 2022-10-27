@@ -13,12 +13,17 @@
   <script>
     let p = new MyPromise((resolve, reject) => {
       // 改变 promise 的状态的三种方法：
-      // resolve('ok');
+      resolve('ok');
       // reject('err');
-      throw 'error';
+      // throw 'error';
     });
     console.log(p);
-    p.then((value) => { }, (reason) => { });
+    p.then((value) => {
+      console.log(value);
+    }, (reason) => {
+      // 输出警告
+      console.warn(reason);
+    });
   </script>
 </body>
 

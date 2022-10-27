@@ -33,4 +33,12 @@ function MyPromise (executor) {
   }
 }
 
-MyPromise.prototype.then = function (onResolved, onRejected) { };
+MyPromise.prototype.then = function (onResolved, onRejected) {
+  // 根据当前不同的promise状态，调用回调函数，并传入结果值
+  if (this.PromiseState === 'fulfilled') {
+    onResolved(this.PromiseResult);
+  }
+  if (this.PromiseState === 'rejected') {
+    onRejected(this.PromiseResult);
+  }
+};
