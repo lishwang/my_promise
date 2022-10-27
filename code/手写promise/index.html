@@ -12,7 +12,10 @@
 <body>
   <script>
     let p = new MyPromise((resolve, reject) => {
-      resolve('ok');
+      // 改变 promise 的状态的三种方法：
+      // resolve('ok');
+      // reject('err');
+      throw 'error';
     });
     console.log(p);
     p.then((value) => { }, (reason) => { });

@@ -20,8 +20,13 @@ function MyPromise (executor) {
     // 2、设置对象结果值（是Promise实例对象上的另一个属性 promiseResult）
     self.promiseResult = data;
   };
-  // 同步调用 执行器函数executor , 并传入实参 resolve 和 reject
-  executor(resolve, reject);
+  try {
+    // 同步调用 执行器函数executor , 并传入实参 resolve 和 reject
+    executor(resolve, reject);
+  } catch (e) {
+    // 实例中也可以通过 throw 一个错误来改变promise的状态，直接调用 reject 将状态改为失败即可
+    reject(e);
+  }
 }
 
 MyPromise.prototype.then = function (onResolved, onRejected) { };
