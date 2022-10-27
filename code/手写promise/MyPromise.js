@@ -6,7 +6,7 @@ function MyPromise (executor) {
   // promise 的结果
   this.PromiseResult = null;
   // 用于保存异步时，then中的回调函数
-  this.callback = {};
+  this.callbacks = [];
   // 保存实例对象的this
   let self = this;
   // 定义 resolve 函数
@@ -19,7 +19,9 @@ function MyPromise (executor) {
     // 2、设置对象结果值（是Promise实例对象上的另一个属性 PromiseResult）
     self.PromiseResult = data;
     // 执行回调（异步时，then中的回调函数），并传入结果值
-    self.callback.onResolved && self.callback.onResolved(data);
+    self.callbacks.forEach(item => {
+      item.onResolved && item.onResolved(data);
+    })
   };
   // 定义 reject 函数
   function rejectFun (data) {
@@ -30,7 +32,9 @@ function MyPromise (executor) {
     // 2、设置对象结果值（是Promise实例对象上的另一个属性 PromiseResult）
     self.PromiseResult = data;
     // 执行回调（异步时，then中的回调函数），并传入结果值
-    self.callback.onRejected && self.callback.onRejected(data);
+    self.callbacks.forEach(item => {
+      item.onRejected && item.onRejected(data);
+    })
   };
   try {
     // 同步调用 执行器函数executor , 并传入实参 resolve 和 reject
@@ -62,9 +66,9 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
    * 因为在异步的情况下，这两个函数会等待 并在异步执行程序中被调用执行；
    */
   if (this.PromiseState === 'pending') {
-    this.callback = {
+    this.callbacks.push({
       onResolved,
       onRejected,
-    }
+    });
   }
 };

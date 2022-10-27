@@ -20,13 +20,19 @@
 
       // 异步处理程序
       setTimeout(() => {
-        // resolve('ok');
-        reject('err');
+        resolve('ok');
+        // reject('err');
       }, 1000);
     });
     // console.log(p);
     p.then((value) => {
       console.log(value);
+    }, (reason) => {
+      // 输出警告
+      console.warn(reason);
+    });
+    p.then((value) => {
+      alert(value);
     }, (reason) => {
       // 输出警告
       console.warn(reason);
