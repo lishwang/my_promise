@@ -52,23 +52,45 @@ function MyPromise (executor) {
 }
 
 MyPromise.prototype.then = function (onResolved, onRejected) {
-  // 根据当前不同的promise状态，调用回调函数，并传入结果值
-  if (this.PromiseState === 'fulfilled') {
-    onResolved(this.PromiseResult);
-  }
-  if (this.PromiseState === 'rejected') {
-    onRejected(this.PromiseResult);
-  }
-  /**
-   * 处理异步处理程序时js会跳过，会先进入then，此时没有执行 resolveFun 和 rejectFun ，
-   * 因此此时promise状态为 pending ，因此可以将then中的两个回调函数保存起来，
-   * 然后放到 resolveFun 和 rejectFun 中执行；
-   * 因为在异步的情况下，这两个函数会等待 并在异步执行程序中被调用执行；
-   */
-  if (this.PromiseState === 'pending') {
-    this.callbacks.push({
-      onResolved,
-      onRejected,
-    });
-  }
+  // then方法的返回值为一个 promise 对象
+  return new MyPromise((resolve, reject) => {
+    // 根据当前不同的promise状态，调用then中的回调函数，并传入结果值
+    if (this.PromiseState === 'fulfilled') {
+      try {
+        // 拿到then方法中成功的回调的返回值
+        let response = onResolved(this.PromiseResult);
+        if (response instanceof MyPromise) {
+          // 返回值是一个promise实例，则then方法的返回值由该实例决定
+          //（调用then方法拿到该实例的返回的结果，并作为总体then的返回结果返回）
+          response.then(v => {
+            resolve(v);
+          }, r => {
+            reject(r);
+          })
+        } else {
+          // 返回值为一个普通的值，则then方法的返回值为一个成功的promise
+          resolve(response);
+        }
+      } catch (error) {
+        // 处理then方法中 throw 一个错误
+        reject(error);
+      }
+
+    }
+    if (this.PromiseState === 'rejected') {
+      onRejected(this.PromiseResult);
+    }
+    /**
+     * 处理异步处理程序时js会跳过，会先进入then，此时没有执行 resolveFun 和 rejectFun ，
+     * 因此此时promise状态为 pending ，因此可以将then中的两个回调函数保存起来，
+     * 然后放到 resolveFun 和 rejectFun 中执行；
+     * 因为在异步的情况下，这两个函数会等待 并在异步执行程序中被调用执行；
+     */
+    if (this.PromiseState === 'pending') {
+      this.callbacks.push({
+        onResolved,
+        onRejected,
+      });
+    }
+  })
 };
