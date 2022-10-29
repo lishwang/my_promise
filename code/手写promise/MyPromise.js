@@ -75,10 +75,28 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
         // 处理then方法中 throw 一个错误
         reject(error);
       }
-
     }
     if (this.PromiseState === 'rejected') {
-      onRejected(this.PromiseResult);
+      // 即使进入then方法的第二个函数，总体then的返回值仍然是一个promise，且跟实例中的失败没有关系，实际的返回值跟上方一致，在此不赘述，代码中未实现
+      try {
+        // 拿到then方法中失败的回调的返回值
+        let response = onRejected(this.PromiseResult);
+        if (response instanceof MyPromise) {
+          // 返回值是一个promise实例，则then方法的返回值由该实例决定
+          //（调用then方法拿到该实例的返回的结果，并作为总体then的返回结果返回）
+          response.then(v => {
+            resolve(v);
+          }, r => {
+            reject(r);
+          })
+        } else {
+          // 返回值为一个普通的值，则then方法的返回值为一个成功的promise
+          resolve(response);
+        }
+      } catch (error) {
+        // 处理then方法中 throw 一个错误
+        reject(error);
+      }
     }
     /**
      * 处理异步处理程序时js会跳过，会先进入then，此时没有执行 resolveFun 和 rejectFun ，

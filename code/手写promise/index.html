@@ -14,8 +14,8 @@
     let p = new MyPromise((resolve, reject) => {
       // 改变 promise 的状态的三种方法：resolve、reject、throw
       // 同步处理程序
-      resolve('ok');
-      // reject('err');
+      // resolve('ok');
+      reject('err');
       // throw 'error';
 
       // 异步处理程序
@@ -44,7 +44,7 @@
       throw '抛出一个错误';
     }, (reason) => {
       // 输出警告
-      // console.warn(reason);
+      console.warn(reason);
     });
     // console.log(p);
     console.log(res);
