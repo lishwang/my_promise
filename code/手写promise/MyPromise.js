@@ -54,6 +54,16 @@ function MyPromise (executor) {
 // 原型上添加 then 方法
 MyPromise.prototype.then = function (onResolved, onRejected) {
   let self = this;
+  /**
+   * 解决catch方法的异常穿透
+   * 通常的书写习惯是then方法中没有用第二个函数来处理失败，因此如果没有传第二个函数，就自己定义一个，否则函数调用时会报错，
+   * 因为第二个函数是处理失败，因此throw这个错误，才能向下传递，被后面的catch捕获到，实现catch的错误穿透处理
+   */
+  if (typeof onRejected !== 'function') {
+    onRejected = reason => {
+      throw reason;
+    }
+  }
   // then方法的返回值为一个 promise 对象
   return new MyPromise((resolve, reject) => {
     // 方法抽离封装
