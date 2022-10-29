@@ -47,58 +47,45 @@ function MyPromise (executor) {
     executor(resolveFun, rejectFun);
   } catch (e) {
     // 实例中也可以通过 throw 一个错误来改变promise的状态，直接调用 rejectFun函数 将状态改为失败即可
-    reject(e);
+    rejectFun(e);
   }
 }
 
 MyPromise.prototype.then = function (onResolved, onRejected) {
+  let self = this;
   // then方法的返回值为一个 promise 对象
   return new MyPromise((resolve, reject) => {
+    // 方法抽离封装
+    function then_callback (fun_type) {
+      // 调用resolve和reject改变状态
+      try {
+        // 拿到then方法中成功的回调的返回值
+        let response = fun_type(self.PromiseResult);
+        if (response instanceof MyPromise) {
+          // 返回值是一个promise实例，则then方法的返回值由该实例决定
+          //（调用then方法拿到该实例的返回的结果，并作为总体then的返回结果返回）
+          response.then(v => {
+            resolve(v);
+          }, r => {
+            reject(r);
+          })
+        } else {
+          // 返回值为一个普通的值，则then方法的返回值为一个成功的promise
+          resolve(response);
+        }
+      } catch (error) {
+        // 处理then方法中 throw 一个错误
+        reject(error);
+      }
+    };
     // 根据当前不同的promise状态，调用then中的回调函数，并传入结果值
     // 实例中为同步执行程序--进入then的成功回调
     if (this.PromiseState === 'fulfilled') {
-      try {
-        // 拿到then方法中成功的回调的返回值
-        let response = onResolved(this.PromiseResult);
-        if (response instanceof MyPromise) {
-          // 返回值是一个promise实例，则then方法的返回值由该实例决定
-          //（调用then方法拿到该实例的返回的结果，并作为总体then的返回结果返回）
-          response.then(v => {
-            resolve(v);
-          }, r => {
-            reject(r);
-          })
-        } else {
-          // 返回值为一个普通的值，则then方法的返回值为一个成功的promise
-          resolve(response);
-        }
-      } catch (error) {
-        // 处理then方法中 throw 一个错误
-        reject(error);
-      }
+      then_callback(onResolved);
     }
     // 实例中为同步执行程序--进入then的失败回调
     if (this.PromiseState === 'rejected') {
-      // 即使进入then方法的第二个函数，总体then的返回值仍然是一个promise，且跟实例中的失败没有关系，实际的返回值跟上方一致，在此不赘述，代码中未实现
-      try {
-        // 拿到then方法中失败的回调的返回值
-        let response = onRejected(this.PromiseResult);
-        if (response instanceof MyPromise) {
-          // 返回值是一个promise实例，则then方法的返回值由该实例决定
-          //（调用then方法拿到该实例的返回的结果，并作为总体then的返回结果返回）
-          response.then(v => {
-            resolve(v);
-          }, r => {
-            reject(r);
-          })
-        } else {
-          // 返回值为一个普通的值，则then方法的返回值为一个成功的promise
-          resolve(response);
-        }
-      } catch (error) {
-        // 处理then方法中 throw 一个错误
-        reject(error);
-      }
+      then_callback(onRejected);
     }
     /**
      * 处理异步处理程序时js会跳过，会先进入then，此时没有执行 resolveFun 和 rejectFun ，
@@ -108,42 +95,13 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
      */
     // 实例中为异步执行程序--进入then的成功/失败回调
     if (this.PromiseState === 'pending') {
-      let self = this;
       this.callbacks.push({
         // 由于这两个方法的调用者都是 item（即对象本身），因此this指向这个被push进去的对象
         onResolved: function () {
-          try {
-            let result = onResolved(self.PromiseResult);
-            if (result instanceof MyPromise) {
-              // 调用resolve和reject改变状态
-              result.then(v => {
-                resolve(v);
-              }, r => {
-                reject(r);
-              })
-            } else {
-              resolve(result);
-            }
-          } catch (error) {
-            reject(error);
-          }
+          then_callback(onResolved);
         },
         onRejected: function () {
-          try {
-            let result = onRejected(self.PromiseResult);
-            if (result instanceof MyPromise) {
-              // 调用resolve和reject改变状态
-              result.then(v => {
-                resolve(v);
-              }, r => {
-                reject(r);
-              })
-            } else {
-              resolve(result);
-            }
-          } catch (error) {
-            reject(error);
-          }
+          then_callback(onRejected);
         }
       });
     }

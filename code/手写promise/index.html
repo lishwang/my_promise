@@ -44,7 +44,8 @@
       throw '抛出一个错误';
     }, (reason) => {
       // 输出警告
-      console.warn(reason);
+      // console.warn(reason);
+      throw '抛出一个错误';
     });
     // console.log(p);
     // 注意：实例中为异步执行程序时，这里的打印结果的状态一开始是pending，等异步执行结束之后才会改为成功或失败，因此在浏览器控制台输出时要等一下再展开这个打印的promise对象，看到的才是正确的状态；
