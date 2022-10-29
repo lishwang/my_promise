@@ -55,6 +55,7 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
   // then方法的返回值为一个 promise 对象
   return new MyPromise((resolve, reject) => {
     // 根据当前不同的promise状态，调用then中的回调函数，并传入结果值
+    // 实例中为同步执行程序--进入then的成功回调
     if (this.PromiseState === 'fulfilled') {
       try {
         // 拿到then方法中成功的回调的返回值
@@ -76,6 +77,7 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
         reject(error);
       }
     }
+    // 实例中为同步执行程序--进入then的失败回调
     if (this.PromiseState === 'rejected') {
       // 即使进入then方法的第二个函数，总体then的返回值仍然是一个promise，且跟实例中的失败没有关系，实际的返回值跟上方一致，在此不赘述，代码中未实现
       try {
@@ -104,10 +106,45 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
      * 然后放到 resolveFun 和 rejectFun 中执行；
      * 因为在异步的情况下，这两个函数会等待 并在异步执行程序中被调用执行；
      */
+    // 实例中为异步执行程序--进入then的成功/失败回调
     if (this.PromiseState === 'pending') {
+      let self = this;
       this.callbacks.push({
-        onResolved,
-        onRejected,
+        // 由于这两个方法的调用者都是 item（即对象本身），因此this指向这个被push进去的对象
+        onResolved: function () {
+          try {
+            let result = onResolved(self.PromiseResult);
+            if (result instanceof MyPromise) {
+              // 调用resolve和reject改变状态
+              result.then(v => {
+                resolve(v);
+              }, r => {
+                reject(r);
+              })
+            } else {
+              resolve(result);
+            }
+          } catch (error) {
+            reject(error);
+          }
+        },
+        onRejected: function () {
+          try {
+            let result = onRejected(self.PromiseResult);
+            if (result instanceof MyPromise) {
+              // 调用resolve和reject改变状态
+              result.then(v => {
+                resolve(v);
+              }, r => {
+                reject(r);
+              })
+            } else {
+              resolve(result);
+            }
+          } catch (error) {
+            reject(error);
+          }
+        }
       });
     }
   })
