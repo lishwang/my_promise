@@ -47,7 +47,7 @@ function MyPromise (executor) {
     executor(resolveFun, rejectFun);
   } catch (e) {
     // 实例中也可以通过 throw 一个错误来改变promise的状态，直接调用 rejectFun函数 将状态改为失败即可
-    reject(e);
+    rejectFun(e);
   }
 }
 
