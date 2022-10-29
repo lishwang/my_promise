@@ -55,7 +55,8 @@
 
     // catch 方法的测试代码 ------------------------------------------------------------
     let p = new MyPromise((resolve, reject) => {
-      reject('err');
+      resolve(111);
+      // reject('err');
       // throw 'error';
 
       // 异步处理程序
@@ -63,11 +64,20 @@
       //   reject('err');
       // }, 1000);
     });
-    let res = p.catch((reason) => {
-      // 输出警告
-      console.warn(reason);
-      // throw '抛出一个错误';
-    });
+    let res = p.then()
+      .then()
+      .then(value => {
+        console.log(111);
+        throw '抛出一个错误';
+      })
+      .then(value => {
+        console.log(222)
+      })
+      .catch((reason) => {
+        // 输出警告
+        console.warn(reason);
+        // throw '抛出一个错误';
+      });
     console.log(res);
   </script>
 </body>

@@ -70,8 +70,8 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
    * 因此需要自己定义一个函数，接收上游传递的值然后直接返回即可；
    */
   if (typeof onResolved !== 'function') {
-    onResolved = reason => {
-      throw reason;
+    onResolved = value => {
+      return value;
     }
   };
   // then方法的返回值为一个 promise 对象
