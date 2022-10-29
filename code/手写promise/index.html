@@ -11,44 +11,63 @@
 
 <body>
   <script>
-    let p = new MyPromise((resolve, reject) => {
-      // 改变 promise 的状态的三种方法：resolve、reject、throw
-      // 同步处理程序
-      // resolve('ok');
-      // reject('err');
-      // throw 'error';
+    // then 方法的测试代码 ------------------------------------------------------------
+    // let p = new MyPromise((resolve, reject) => {
+    //   // 改变 promise 的状态的三种方法：resolve、reject、throw
+    //   // 同步处理程序
+    //   // resolve('ok');
+    //   // reject('err');
+    //   // throw 'error';
 
-      // 异步处理程序
-      setTimeout(() => {
-        resolve('ok');
-        // reject('err');
-      }, 1000);
-    });
-    // console.log(p);
-    // p.then((value) => {
-    //   // console.log(value);
+    //   // 异步处理程序
+    //   setTimeout(() => {
+    //     resolve('ok');
+    //     // reject('err');
+    //   }, 1000);
+    // });
+    // // console.log(p);
+    // // p.then((value) => {
+    // //   // console.log(value);
+    // // }, (reason) => {
+    // //   // 输出警告
+    // //   // console.warn(reason);
+    // // });
+    // let res = p.then((value) => {
+    //   // alert(value);
+    //   // 1、返回一个普通的值
+    //   // return '返回一个普通的值'
+    //   ///2、返回一个promise
+    //   // return new MyPromise((resolve, reject) => {
+    //   //   // resolve('成功了 返回一个promise');
+    //   //   reject('失败了 返回一个promise')
+    //   // })
+    //   ///3、抛出一个错误
+    //   throw '抛出一个错误';
     // }, (reason) => {
     //   // 输出警告
     //   // console.warn(reason);
+    //   throw '抛出一个错误';
     // });
-    let res = p.then((value) => {
-      // alert(value);
-      // 1、返回一个普通的值
-      // return '返回一个普通的值'
-      ///2、返回一个promise
-      // return new MyPromise((resolve, reject) => {
-      //   // resolve('成功了 返回一个promise');
-      //   reject('失败了 返回一个promise')
-      // })
-      ///3、抛出一个错误
-      throw '抛出一个错误';
-    }, (reason) => {
-      // 输出警告
-      // console.warn(reason);
-      throw '抛出一个错误';
+    // // console.log(p);
+    // // 注意：实例中为异步执行程序时，这里的打印结果的状态一开始是pending，等异步执行结束之后才会改为成功或失败，因此在浏览器控制台输出时要等一下再展开这个打印的promise对象，看到的才是正确的状态；
+    // console.log(res);
+
+
+    // then 方法的测试代码 ------------------------------------------------------------
+    let p = new MyPromise((resolve, reject) => {
+      reject('err');
+      // throw 'error';
+
+      // 异步处理程序
+      // setTimeout(() => {
+      //   reject('err');
+      // }, 1000);
     });
-    // console.log(p);
-    // 注意：实例中为异步执行程序时，这里的打印结果的状态一开始是pending，等异步执行结束之后才会改为成功或失败，因此在浏览器控制台输出时要等一下再展开这个打印的promise对象，看到的才是正确的状态；
+    let res = p.catch((reason) => {
+      // 输出警告
+      console.warn(reason);
+      // throw '抛出一个错误';
+    });
     console.log(res);
   </script>
 </body>

@@ -51,6 +51,7 @@ function MyPromise (executor) {
   }
 }
 
+// 原型上添加 then 方法
 MyPromise.prototype.then = function (onResolved, onRejected) {
   let self = this;
   // then方法的返回值为一个 promise 对象
@@ -107,3 +108,9 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
     }
   })
 };
+
+// 原型上添加 catch 方法
+MyPromise.prototype.catch = function (onRejected) {
+  // 由于 catch 方法的处理跟 then 相同，且返回一个 promise，因此可以直接调用then方法
+  return this.then(undefined, onRejected);
+}
