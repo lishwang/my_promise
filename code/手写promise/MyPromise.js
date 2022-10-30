@@ -149,3 +149,11 @@ MyPromise.resolve = function (value) {
     }
   })
 }
+
+// 构造函数身上的 reject 方法，不在原型上，因此在实例中也看不到
+// reject 方法始终返回失败的promise
+MyPromise.reject = function (reason) {
+  return new MyPromise((resolve, reject) => {
+    reject(reason);
+  })
+}

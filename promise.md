@@ -88,7 +88,7 @@ let p = Promise.resolve(new Promise((resolve, reject) => {
 ##### Promise.reject 方法 ` (err) => {} `;
 
 - err 失败的数据；即使 传入的 err 为一个成功的 promise 对象，整体结果依然返回失败，返回的状态是 rejected ，失败的结果是传入的 成功的promise 对象的值；
-- 说明：永远返回一个失败的 promise 对象；
+- 说明：**永远返回一个失败的 promise 对象；**
 
 ##### Promise.all 方法 ` (promises) => {} `;
 
