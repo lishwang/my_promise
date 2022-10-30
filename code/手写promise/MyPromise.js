@@ -1,5 +1,8 @@
 
-// 将 main 分支的 构造函数的风格 转换成 类的风格
+/**
+ * 构造函数版本的promise封装完成，在main分支
+ * class类版本的promise封装完成，在dev分支
+ */
 
 class MyPromise {
   // 构造函数
