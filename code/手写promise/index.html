@@ -104,19 +104,34 @@
 
 
     // Promise.all/race 方法的测试代码 ------------------------------------------------------------------
+    // let p1 = new MyPromise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     resolve('111');
+    //   }, 1000)
+    // })
+    // let p2 = MyPromise.resolve('222');
+    // let p3 = MyPromise.resolve('333');
+    // let p5 = MyPromise.reject('333');
+    // // let res = MyPromise.all([p1, p2, p3]);
+    // // let res = MyPromise.all([p1, p2, p5]);
+    // let res = MyPromise.race([p1, p2, p3]);
+    // // let res = MyPromise.race([p1, p2, p5]);
+    // console.log(res);
+
+
+    // 细节补充：then方法中的回调是异步执行的，promise中的回调是同步执行的
+    // 以下代码的执行结果及顺序要求为 111 333 222；
     let p1 = new MyPromise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('111');
-      }, 1000)
+      // resolve('ok');
+      reject('err');
+      console.log(111);
     })
-    let p2 = MyPromise.resolve('222');
-    let p3 = MyPromise.resolve('333');
-    let p5 = MyPromise.reject('333');
-    // let res = MyPromise.all([p1, p2, p3]);
-    // let res = MyPromise.all([p1, p2, p5]);
-    let res = MyPromise.race([p1, p2, p3]);
-    // let res = MyPromise.race([p1, p2, p5]);
-    console.log(res);
+    p1.then(value => {
+      console.log(222);
+    }, reason => {
+      console.log(444);
+    })
+    console.log(333);
   </script>
 </body>
 

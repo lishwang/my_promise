@@ -67,6 +67,7 @@ console.log(222);
 ##### Promise.prototype.then 方法
 
 - 指定用于得到成功 response 的成功回调 和 用于得到失败 error 的失败回调，返回一个新的 promise 对象；
+- **then中的回调是异步执行的**
 
 ##### Promise.prototype.catch 方法
 
@@ -178,5 +179,21 @@ p.then(() => {
   console.log(err);
 })
 // 控制台结果：2
+```
+
+##### then中的回调是异步执行的，Promise中的回调是同步执行的***
+
+- then中的回调执行时可以包裹一个setTimeout，可以不设置时间，默认为0；
+
+```
+// 以下代码的执行结果及顺序为 111 333 222；
+let p1 = new Promise((resolve,reject)=>{
+	resolve('ok');
+	console.log(111);
+})
+p1.then(value=>{
+	console.log(222);
+})
+console.log(333);
 ```
 

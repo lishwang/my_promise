@@ -19,9 +19,12 @@ function MyPromise (executor) {
     // 2、设置对象结果值（是Promise实例对象上的另一个属性 PromiseResult）
     self.PromiseResult = data;
     // 执行回调（异步时，then中的回调函数），并传入结果值
-    self.callbacks.forEach(item => {
-      item.onResolved && item.onResolved(data);
-    })
+    // 细节完善：then方法中的回调是异步执行的，因此包裹一个setTimeout，可以不设置时间，默认为0
+    setTimeout(() => {
+      self.callbacks.forEach(item => {
+        item.onResolved && item.onResolved(data);
+      })
+    }, 0);
   };
   // 定义 reject 函数
   function rejectFun (data) {
@@ -32,9 +35,12 @@ function MyPromise (executor) {
     // 2、设置对象结果值（是Promise实例对象上的另一个属性 PromiseResult）
     self.PromiseResult = data;
     // 执行回调（异步时，then中的回调函数），并传入结果值
-    self.callbacks.forEach(item => {
-      item.onRejected && item.onRejected(data);
-    })
+    // 细节完善：then方法中的回调是异步执行的，因此包裹一个setTimeout，可以不设置时间，默认为0
+    setTimeout(() => {
+      self.callbacks.forEach(item => {
+        item.onRejected && item.onRejected(data);
+      })
+    }, 0);
   };
   try {
     // 同步调用 执行器函数executor , 并传入实参 resolve 和 reject
@@ -102,11 +108,16 @@ MyPromise.prototype.then = function (onResolved, onRejected) {
     // 根据当前不同的promise状态，调用then中的回调函数，并传入结果值
     // 实例中为同步执行程序--进入then的成功回调
     if (this.PromiseState === 'fulfilled') {
-      then_callback(onResolved);
+      // 细节完善：then方法中的回调是异步执行的，因此包裹一个setTimeout，可以不设置时间，默认为0
+      setTimeout(() => {
+        then_callback(onResolved);
+      }, 0);
     }
     // 实例中为同步执行程序--进入then的失败回调
     if (this.PromiseState === 'rejected') {
-      then_callback(onRejected);
+      setTimeout(() => {
+        then_callback(onRejected);
+      }, 0);
     }
     /**
      * 处理异步处理程序时js会跳过，会先进入then，此时没有执行 resolveFun 和 rejectFun ，
