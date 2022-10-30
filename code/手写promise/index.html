@@ -122,8 +122,8 @@
     // 细节补充：then方法中的回调是异步执行的，promise中的回调是同步执行的
     // 以下代码的执行结果及顺序要求为 111 333 222；
     let p1 = new MyPromise((resolve, reject) => {
-      // resolve('ok');
-      reject('err');
+      resolve('ok');
+      // reject('err');
       console.log(111);
     })
     p1.then(value => {
