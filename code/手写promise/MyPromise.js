@@ -1,4 +1,8 @@
 
+/** promise的构造函数版本
+ * 
+ * @param {*} executor promise中的回调
+ */
 function MyPromise (executor) {
   // 添加属性
   // promise 的状态
