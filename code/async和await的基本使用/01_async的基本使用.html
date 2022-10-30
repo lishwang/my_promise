@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    async function main () {
+      // 1、返回一个非promise类型的数据
+      // return '123';
+      // 2、返回一个promise对象
+      // return new Promise((resolve, reject) => {
+      //   // resolve('ok');
+      //   reject('err');
+      // })
+      // 3、抛出异常
+      throw 'oh no';
+    }
+
+    let res = main();
+
+    console.log(res);
+  </script>
+</body>
+
+</html>

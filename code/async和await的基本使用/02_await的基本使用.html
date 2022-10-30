@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>11</div>
+  <p>222</p>
+  <script>
+    async function main () {
+      let p = new Promise((resolve, reject) => {
+        // 1、右侧为promise的情况-成功
+        // resolve('ok');
+        // 2、右侧为promise的情况-失败，需要 try...catch 捕获错误
+        reject('err');
+      })
+
+      // 1、右侧为promise的情况-成功
+      // let res = await p;
+      // console.log(res);
+
+      // 2、右侧为promise的情况-失败，需要 try...catch 捕获错误
+      // try {
+      //   let res = await p;
+      // } catch (error) {
+      //   console.log(error);
+      // }
+
+      // 3、右侧为其他类型数据
+      // let res = await 20;
+      // console.log(res);
+
+      // 4、右侧为非promise类型异步执行程序（await不会等待其他非promise异步程序的执行）
+      // let res = await setTimeout(async () => {
+      //   await console.log(111);
+      //   return 222;
+      // }, 0);
+      // console.log(333);
+      // console.log(res);
+      // console.log(555);
+      // 结果执行顺序为：333 1 555 111
+
+      // 5、右侧为元素的获取（元素获取为同步代码）
+      let dom = document.querySelector('div');
+      let dom2 = await document.querySelector('p');
+      console.log(111);
+      console.log(dom2);
+      console.log(dom);
+      console.log(222);
+    }
+    main();
+  </script>
+</body>
+
+</html>
