@@ -94,7 +94,7 @@ let p = Promise.resolve(new Promise((resolve, reject) => {
 
 - promises 包含 n 个 promise 的数组；
 - 说明：**返回一个新的 promise ，只有所有的 promise 都成功才成功，只要有一个失败了就直接失败；**
-- 成功的结果是每一个promise对象成功的结果组成的数组；失败的结果是在这个数组当中失败的promise对象的失败的结果；
+- 成功的结果是每一个promise对象成功的结果组成的数组（数组中结果的顺序跟promise数组中的顺序一致，**一一对应原则**）；失败的结果是在这个数组当中失败的promise对象的失败的结果；
 
 ##### Promise.race 方法：` (promises) => {} ` ;
 

@@ -157,3 +157,24 @@ MyPromise.reject = function (reason) {
     reject(reason);
   })
 }
+
+// 构造函数身上的 all 方法，不在原型上，因此在实例中也看不到
+MyPromise.all = function (MyPromiseArr) {
+  return new MyPromise((resolve, reject) => {
+    // 用于记录是否MyPromiseArr中所有的promise都是成功的，只有都成功才返回成功
+    let count = 0;
+    // 用于存储每个promise的成功的结果，并一一对应
+    let resultArr = [];
+    for (let i = 0; i < MyPromiseArr.length; i++) {
+      MyPromiseArr[i].then(v => {
+        count++;
+        resultArr[i] = v;
+        if (count === MyPromiseArr.length) {
+          resolve(resultArr);
+        }
+      }, r => {
+        reject(r);
+      })
+    }
+  })
+}
