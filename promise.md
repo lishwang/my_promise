@@ -75,7 +75,7 @@ console.log(222);
 ##### Promise.resolve 方法  ` (response) => {} `;
 
 - response 成功的数据或 promise 对象；如果传入的 response 是一个非promise类型的对象，则返回的结果为成功的promise对象；**如果传入 response 是一个 promise 对象，则传入的 response 的结果决定了 resolve 的结果；**
-- 属于函数对象的，并不在实例对象上；
+- **属于函数对象的，不是原型上的属性，因此并不在实例对象上；**
 - 说明：返回一个成功/失败的promise对象；
 
 ```

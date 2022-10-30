@@ -134,3 +134,18 @@ MyPromise.prototype.catch = function (onRejected) {
   // 由于 catch 方法的处理跟 then 相同，且返回一个 promise，因此可以直接调用then方法
   return this.then(undefined, onRejected);
 }
+
+// 构造函数身上的 resolve 方法，不在原型上，因此在实例中也看不到
+MyPromise.resolve = function (value) {
+  return new Promise((resolve, reject) => {
+    if (value instanceof MyPromise) {
+      value.then(v => {
+        resolve(v);
+      }, r => {
+        reject(r);
+      })
+    } else {
+      resolve(value);
+    }
+  })
+}

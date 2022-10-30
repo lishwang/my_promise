@@ -54,31 +54,43 @@
 
 
     // catch 方法的测试代码 ------------------------------------------------------------
-    let p = new MyPromise((resolve, reject) => {
-      resolve(111);
-      // reject('err');
-      // throw 'error';
+    // let p = new MyPromise((resolve, reject) => {
+    //   resolve(111);
+    //   // reject('err');
+    //   // throw 'error';
 
-      // 异步处理程序
-      // setTimeout(() => {
-      //   reject('err');
-      // }, 1000);
-    });
-    let res = p.then()
-      .then()
-      .then(value => {
-        console.log(111);
-        throw '抛出一个错误';
-      })
-      .then(value => {
-        console.log(222)
-      })
-      .catch((reason) => {
-        // 输出警告
-        console.warn(reason);
-        // throw '抛出一个错误';
-      });
-    console.log(res);
+    //   // 异步处理程序
+    //   // setTimeout(() => {
+    //   //   reject('err');
+    //   // }, 1000);
+    // });
+    // let res = p.then()
+    //   .then()
+    //   .then(value => {
+    //     console.log(111);
+    //     throw '抛出一个错误';
+    //   })
+    //   .then(value => {
+    //     console.log(222)
+    //   })
+    //   .catch((reason) => {
+    //     // 输出警告
+    //     console.warn(reason);
+    //     // throw '抛出一个错误';
+    //   });
+    // console.log(res);
+
+
+    // Promsie.resolve 方法的测试代码 --------------------------------------------------------------
+    let p = MyPromise.resolve('ok');
+    let p1 = MyPromise.resolve(new MyPromise((resolve, reject) => {
+      // resolve('success');
+      reject('err');
+    }));
+    p1.catch(err => {
+      console.log(err);
+    })
+    console.log(p1);
   </script>
 </body>
 
