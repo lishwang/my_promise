@@ -103,7 +103,7 @@
     // console.log(p2);
 
 
-    // Promise.all 方法的测试代码 ------------------------------------------------------------------
+    // Promise.all/race 方法的测试代码 ------------------------------------------------------------------
     let p1 = new MyPromise((resolve, reject) => {
       setTimeout(() => {
         resolve('111');
@@ -113,7 +113,9 @@
     let p3 = MyPromise.resolve('333');
     let p5 = MyPromise.reject('333');
     // let res = MyPromise.all([p1, p2, p3]);
-    let res = MyPromise.all([p1, p2, p5]);
+    // let res = MyPromise.all([p1, p2, p5]);
+    let res = MyPromise.race([p1, p2, p3]);
+    // let res = MyPromise.race([p1, p2, p5]);
     console.log(res);
   </script>
 </body>

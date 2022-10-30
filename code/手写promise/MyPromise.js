@@ -178,3 +178,18 @@ MyPromise.all = function (MyPromiseArr) {
     }
   })
 }
+
+// 构造函数身上的 race 方法，不在原型上，因此在实例中也看不到
+MyPromise.race = function (MyPromiseArr) {
+  return new MyPromise((resolve, reject) => {
+    for (let i = 0; i < MyPromiseArr.length; i++) {
+      // 谁先执行，谁返回，状态只改变一次
+      MyPromiseArr[i].then(v => {
+        resolve(v);
+      }, r => {
+        reject(r);
+      });
+
+    }
+  })
+}
